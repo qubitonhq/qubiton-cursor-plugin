@@ -1,0 +1,18 @@
+{
+  "name": "qubiton-plugins",
+  "owner": {
+    "name": "QubitOn",
+    "email": "support@qubiton.com"
+  },
+  "metadata": {
+    "description": "Official QubitOn plugins — validate, enrich, and screen vendor and supplier data via the Model Context Protocol",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "qubiton",
+      "source": "./plugins/qubiton",
+      "description": "Validate addresses, tax IDs, bank accounts, phone numbers, and screen entities against global sanctions and PEP lists across 200+ countries — directly from your AI assistant."
+    }
+  ]
+}

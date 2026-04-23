@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "qubiton": {
+      "url": "https://mcp.qubiton.com/mcp",
+      "headers": {
+        "apikey": "${QUBITON_API_KEY}"
+      }
+    }
+  }
+}

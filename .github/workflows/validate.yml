@@ -1,0 +1,37 @@
+name: Validate plugin
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fetch Cursor template validator
+        run: |
+          curl -sL -o validate-template.mjs \
+            https://raw.githubusercontent.com/cursor/plugin-template/main/scripts/validate-template.mjs
+
+      - name: Run validator
+        run: node validate-template.mjs
+
+      - name: Lint JSON manifests
+        run: |
+          for f in .cursor-plugin/marketplace.json \
+                  plugins/*/.cursor-plugin/plugin.json \
+                  plugins/*/mcp.json; do
+            echo "Validating $f"
+            python3 -m json.tool "$f" > /dev/null
+          done

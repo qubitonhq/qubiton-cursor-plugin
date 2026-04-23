@@ -1,0 +1,42 @@
+{
+  "name": "qubiton",
+  "displayName": "QubitOn",
+  "version": "1.0.0",
+  "description": "Validate addresses, tax IDs, bank accounts, phone numbers, and screen entities against global sanctions and PEP lists across 200+ countries — directly from your AI assistant.",
+  "author": {
+    "name": "QubitOn",
+    "email": "support@qubiton.com"
+  },
+  "license": "MIT",
+  "homepage": "https://www.qubiton.com",
+  "repository": "https://github.com/qubitonhq/qubiton-cursor-plugin",
+  "keywords": [
+    "qubiton",
+    "mcp",
+    "model-context-protocol",
+    "validation",
+    "enrichment",
+    "address-validation",
+    "tax-validation",
+    "bank-validation",
+    "sanctions-screening",
+    "pep-screening",
+    "kyb",
+    "kyc",
+    "supplier-data",
+    "vendor-data",
+    "data-quality"
+  ],
+  "tags": [
+    "qubiton",
+    "mcp",
+    "validation",
+    "enrichment",
+    "compliance",
+    "supplier-data"
+  ],
+  "logo": "assets/logo.svg",
+  "skills": "./skills/",
+  "rules": "./rules/",
+  "mcpServers": "./mcp.json"
+}

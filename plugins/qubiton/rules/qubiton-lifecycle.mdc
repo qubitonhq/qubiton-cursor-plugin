@@ -1,0 +1,101 @@
+---
+description: Enforces correct QubitOn MCP tool lifecycle, safety rules, and error handling. Governs all interactions with the QubitOn MCP server.
+alwaysApply: true
+---
+
+# QubitOn MCP lifecycle
+
+This workspace uses QubitOn MCP to validate and enrich vendor, supplier, and
+business data — addresses, tax IDs, bank accounts, phone numbers, and
+sanctions/PEP screening. These rules govern how you interact with QubitOn tools.
+
+## When to use QubitOn
+
+Reach for QubitOn tools when the user asks you to:
+
+- Validate an address, tax ID, bank account, phone number, or email
+- Enrich a company or supplier record with firmographic data
+- Screen an entity or person against global sanctions or PEP lists
+- Look up business registration details (name, status, officers) by country
+- Check coverage for a specific country or data type
+
+Do **not** use QubitOn for general web search, code generation, or tasks
+unrelated to vendor/supplier data quality.
+
+## Authentication
+
+QubitOn MCP requires an API key sent in the `apikey` header. Before the user
+can call any tool, `QUBITON_API_KEY` must be set in their environment or the
+key must be configured in their MCP client settings.
+
+If a tool call fails with `401 Unauthorized` or a message mentioning
+"apikey" / "api key":
+
+1. Tell the user their QubitOn API key is missing or invalid.
+2. Direct them to [www.qubiton.com](https://www.qubiton.com) → **Dashboard →
+   API Keys** to copy their key.
+3. Explain they should set `QUBITON_API_KEY` in their MCP client config (or
+   the `apikey` header value directly) and reconnect the server.
+
+Never ask the user to paste their API key into chat — it should only live in
+their MCP client configuration.
+
+## Safety model: reads vs writes
+
+All QubitOn MCP tools are **read-only validation and screening operations**.
+They do not mutate data in the user's systems. It is always safe to call
+QubitOn tools without explicit confirmation for individual records.
+
+However, respect quota:
+
+- QubitOn charges per API call against the user's plan quota (visible in
+  the [Dashboard](https://www.qubiton.com)). The MCP server does not expose
+  a quota-check tool — always defer quota questions to the dashboard.
+- Before running a batch (>10 validations), estimate the call count and
+  confirm with the user: "This will use ~N QubitOn API calls from your
+  quota. Proceed?"
+- If a call returns `429`, read the `Retry-After` header and respect it;
+  don't retry-loop a rate-limited call.
+
+## Error handling
+
+| Error | Meaning | What to do |
+|-------|---------|-----------|
+| `401 Unauthorized` | API key missing or invalid | See Authentication above |
+| `403 Forbidden` | The user's plan doesn't include this capability | Tell them which plan tier unlocks it and point to [pricing](https://www.qubiton.com/pricing) |
+| `429 Too Many Requests` | Rate limit or quota exhausted | Check the `Retry-After` header; pause and retry, or tell the user their quota is exhausted for this billing period |
+| `5xx` | Transient QubitOn service error | Retry once with backoff; if it persists, tell the user and link [status.qubiton.com](https://status.qubiton.com) |
+
+When a tool returns a validation result, always surface both the **status**
+(valid / invalid / partial) and the **standardized/canonical form** of the
+input if one is returned — the canonical form is often more useful than a
+boolean.
+
+## Result interpretation
+
+- **Address validation** returns a match level (e.g., premise, street, locality)
+  and standardized components. Prefer reporting the match level over
+  "valid/invalid" — partial matches are useful data.
+- **Tax ID validation** returns a format check and, where supported (EU VAT,
+  UK VAT, India GSTIN, etc.), a live authority check. Distinguish between
+  "format valid" and "authority confirmed".
+- **Bank account validation** returns routing validation and, where
+  supported, account existence. Surface any country-specific codes (IBAN,
+  SWIFT/BIC, ACH routing, etc.).
+- **Sanctions / PEP screening** returns match candidates with a confidence
+  score. Never declare someone "sanctioned" on a fuzzy match alone — present
+  candidates and their scores and let the user decide.
+
+## Country coverage
+
+Coverage varies by data type. If a tool returns `"country not supported"` or
+similar, tell the user which countries are supported for that capability and
+offer the closest alternative (e.g., if Argentinian bank validation isn't
+live, offer IBAN format check if applicable).
+
+## Privacy
+
+The user's validation payloads (addresses, tax IDs, names) are sent to
+QubitOn. Do not include real PII in examples or test calls unless the user
+explicitly provides it. When showing tool output to the user, never
+paraphrase or reconstruct PII that wasn't already in the conversation.
