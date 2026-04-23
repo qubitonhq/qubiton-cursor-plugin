@@ -64,7 +64,7 @@ However, respect quota:
 | `401 Unauthorized` | API key missing or invalid | See Authentication above |
 | `403 Forbidden` | The user's plan doesn't include this capability | Tell them which plan tier unlocks it and point to [pricing](https://www.qubiton.com/pricing) |
 | `429 Too Many Requests` | Rate limit or quota exhausted | Check the `Retry-After` header; pause and retry, or tell the user their quota is exhausted for this billing period |
-| `5xx` | Transient QubitOn service error | Retry once with backoff; if it persists, tell the user and link [status.qubiton.com](https://status.qubiton.com) |
+| `5xx` | Transient QubitOn service error | Retry once with backoff; if it persists, tell the user to contact support@qubiton.com |
 
 When a tool returns a validation result, always surface both the **status**
 (valid / invalid / partial) and the **standardized/canonical form** of the

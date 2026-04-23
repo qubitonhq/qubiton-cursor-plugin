@@ -98,5 +98,4 @@ MIT — see [LICENSE](./LICENSE).
 
 - Website: [www.qubiton.com](https://www.qubiton.com)
 - Docs: [www.qubiton.com/docs](https://www.qubiton.com/docs)
-- Status: [status.qubiton.com](https://status.qubiton.com)
 - Support: support@qubiton.com

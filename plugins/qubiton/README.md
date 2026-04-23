@@ -62,6 +62,5 @@ confirm before running large batches (>10 calls).
 ## Support
 
 - Docs: [www.qubiton.com/docs](https://www.qubiton.com/docs)
-- Status: [status.qubiton.com](https://status.qubiton.com)
 - Issues: [github.com/qubitonhq/qubiton-cursor-plugin/issues](https://github.com/qubitonhq/qubiton-cursor-plugin/issues)
 - Email: support@qubiton.com

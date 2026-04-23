@@ -37,7 +37,7 @@ When diagnosing a failed call, match the error status:
 | `403` | Tool not included in the user's plan | Direct them to [qubiton.com/pricing](https://www.qubiton.com/pricing) |
 | `404` | Country or variant not supported for that tool | Run Mode 2 (coverage) below |
 | `429` | Rate limit or quota exhausted | Check the `Retry-After` header; for quota, direct them to the [Dashboard](https://www.qubiton.com) → Usage |
-| `5xx` | Transient QubitOn service error | Retry once with backoff; if persistent, link [status.qubiton.com](https://status.qubiton.com) |
+| `5xx` | Transient QubitOn service error | Retry once with backoff; if persistent, ask the user to contact support@qubiton.com |
 
 ## Mode 2: Coverage
 
